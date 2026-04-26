@@ -15,6 +15,7 @@ String HueClient::request(const char* httpMethod, const char* endpoint, const ch
 {
     char url[200];
     sprintf(url, "http://%s/api/%s%s", _ip, _user, endpoint);
+
     _http.begin(url);
 
     int httpCode;
@@ -35,11 +36,13 @@ String HueClient::request(const char* httpMethod, const char* endpoint, const ch
     if (httpCode > 0) {
         if (httpCode == HTTP_CODE_OK) {
             String payload = _http.getString();
+            USE_SERIAL.print(payload);
             return payload;
         }
     }
     else {
         USE_SERIAL.printf("[HTTP] PUT... failed, error: %s\n", _http.errorToString(httpCode).c_str());
+        return "";
     }
 
     _http.end();

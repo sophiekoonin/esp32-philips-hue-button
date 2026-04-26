@@ -45,13 +45,15 @@ void HueGroup::scrollBrightnessStart()
     sprintf(endpoint, "/groups/%d", _group);
     String response = _conn.request("GET", endpoint);
 
-    String part = response.substring(response.indexOf("\"bri\"") + 6);
-    _brightness = part.substring(0, part.indexOf(",")).toInt();
+    if (response != "") {
+        String part = response.substring(response.indexOf("\"bri\"") + 6);
+        _brightness = part.substring(0, part.indexOf(",")).toInt();
 
-    if (response.indexOf("\"any_on\":false") > -1) {
-        sprintf(endpoint, "/groups/%d/action", _group);
-        _conn.request("PUT", endpoint, "{\"on\": true,\"bri\": 0}");
-        _brightness = 0;
+        if (response.indexOf("\"any_on\":false") > -1) {
+            sprintf(endpoint, "/groups/%d/action", _group);
+            _conn.request("PUT", endpoint, "{\"on\": true,\"bri\": 0}");
+            _brightness = 0;
+        }
     }
 }
 
