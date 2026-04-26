@@ -51,7 +51,8 @@ void loop() {
 
   button.update();
   if (button.isClick()) {
-    fill_solid(leds + 5, NUM_LEDS, CRGB::White);
+    // The LED strip is longer than it needs to be, to avoid stress on the soldered bit
+    fill_solid(leds + 4, NUM_LEDS, CRGB::White);
     FastLED.show();
     ledOn = true;
   }
