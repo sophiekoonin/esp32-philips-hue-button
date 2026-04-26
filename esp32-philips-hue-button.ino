@@ -42,8 +42,14 @@ void setup() {
     USE_SERIAL.flush();
   }
   wifiMulti.addAP(WIFI_SSID, WIFI_PASSWORD);
-  if ((wifiMulti.run() != WL_CONNECTED)) {
-    USE_SERIAL.println("Unable to connect");
+  int attempts = 0;
+  while (wifiMulti.run() != WL_CONNECTED && attempts < 5) {
+    USE_SERIAL.printf("WiFi attempt %d failed, retrying...\n", attempts + 1);
+    attempts++;
+    delay(1000);
+  }
+  if (WiFi.status() != WL_CONNECTED) {
+    USE_SERIAL.println("Unable to connect after 5 attempts");
   }
 }
 
